@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="perfilticModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="idCategory" />
+          </Key>
+          <Property Name="idCategory" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="namePhoto" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="fatherCategory" Type="int" />
+        </EntityType>
+        <EntityType Name="photos_product">
+          <Key>
+            <PropertyRef Name="id_photo" />
+          </Key>
+          <Property Name="id_photo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idProduct" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="idProduct" />
+          </Key>
+          <Property Name="idProduct" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="weight" Type="float" Nullable="false" />
+          <Property Name="price" Type="float" Nullable="false" />
+          <Property Name="idCategory" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product_user">
+          <Key>
+            <PropertyRef Name="idProduct" />
+            <PropertyRef Name="idUsuer" />
+          </Key>
+          <Property Name="idProduct" Type="int" Nullable="false" />
+          <Property Name="idUsuer" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="idUsuer" />
+          </Key>
+          <Property Name="idUsuer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="user" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="type" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="verificationCode" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="category$fk_Category_Category1">
+          <End Role="category" Type="Self.category" Multiplicity="0..1" />
+          <End Role="category1" Type="Self.category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="idCategory" />
+            </Principal>
+            <Dependent Role="category1">
+              <PropertyRef Name="fatherCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="photos_product$fk_Photos_Product_Product1">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="photos_product" Type="Self.photos_product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="photos_product">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="product$fk_Product_Category">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="idCategory" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="idCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="product_user$fk_Product_User_Product1">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="product_user" Type="Self.product_user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="product_user">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="product_user$fk_Product_User_User1">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="product_user" Type="Self.product_user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="idUsuer" />
+            </Principal>
+            <Dependent Role="product_user">
+              <PropertyRef Name="idUsuer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="perfilticModelStoreContainer">
+          <EntitySet Name="category" EntityType="Self.category" Schema="perfiltic" store:Type="Tables" />
+          <EntitySet Name="photos_product" EntityType="Self.photos_product" Schema="perfiltic" store:Type="Tables" />
+          <EntitySet Name="product" EntityType="Self.product" Schema="perfiltic" store:Type="Tables" />
+          <EntitySet Name="product_user" EntityType="Self.product_user" Schema="perfiltic" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="perfiltic" store:Type="Tables" />
+          <AssociationSet Name="category$fk_Category_Category1" Association="Self.category$fk_Category_Category1">
+            <End Role="category" EntitySet="category" />
+            <End Role="category1" EntitySet="category" />
+          </AssociationSet>
+          <AssociationSet Name="photos_product$fk_Photos_Product_Product1" Association="Self.photos_product$fk_Photos_Product_Product1">
+            <End Role="product" EntitySet="product" />
+            <End Role="photos_product" EntitySet="photos_product" />
+          </AssociationSet>
+          <AssociationSet Name="product$fk_Product_Category" Association="Self.product$fk_Product_Category">
+            <End Role="category" EntitySet="category" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="product_user$fk_Product_User_Product1" Association="Self.product_user$fk_Product_User_Product1">
+            <End Role="product" EntitySet="product" />
+            <End Role="product_user" EntitySet="product_user" />
+          </AssociationSet>
+          <AssociationSet Name="product_user$fk_Product_User_User1" Association="Self.product_user$fk_Product_User_User1">
+            <End Role="user" EntitySet="user" />
+            <End Role="product_user" EntitySet="product_user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="perfilticModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="idCategory" />
+          </Key>
+          <Property Name="idCategory" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="namePhoto" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fatherCategory" Type="Int32" />
+          <NavigationProperty Name="category1" Relationship="Self.category_fk_Category_Category1" FromRole="category" ToRole="category1" />
+          <NavigationProperty Name="category2" Relationship="Self.category_fk_Category_Category1" FromRole="category1" ToRole="category" />
+          <NavigationProperty Name="product" Relationship="Self.product_fk_Product_Category" FromRole="category" ToRole="product" />
+        </EntityType>
+        <EntityType Name="photos_product">
+          <Key>
+            <PropertyRef Name="id_photo" />
+          </Key>
+          <Property Name="id_photo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idProduct" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="product" Relationship="Self.photos_product_fk_Photos_Product_Product1" FromRole="photos_product" ToRole="product" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="idProduct" />
+          </Key>
+          <Property Name="idProduct" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="weight" Type="Double" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="idCategory" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="category" Relationship="Self.product_fk_Product_Category" FromRole="product" ToRole="category" />
+          <NavigationProperty Name="photos_product" Relationship="Self.photos_product_fk_Photos_Product_Product1" FromRole="product" ToRole="photos_product" />
+          <NavigationProperty Name="user" Relationship="Self.product_user" FromRole="product" ToRole="user" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="idUsuer" />
+          </Key>
+          <Property Name="idUsuer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="verificationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="product" Relationship="Self.product_user" FromRole="user" ToRole="product" />
+        </EntityType>
+        <Association Name="category_fk_Category_Category1">
+          <End Role="category" Type="Self.category" Multiplicity="0..1" />
+          <End Role="category1" Type="Self.category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="idCategory" />
+            </Principal>
+            <Dependent Role="category1">
+              <PropertyRef Name="fatherCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="product_fk_Product_Category">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="idCategory" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="idCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="photos_product_fk_Photos_Product_Product1">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="photos_product" Type="Self.photos_product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="idProduct" />
+            </Principal>
+            <Dependent Role="photos_product">
+              <PropertyRef Name="idProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="product_user">
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="perfilticEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="category" EntityType="Self.category" />
+          <EntitySet Name="photos_product" EntityType="Self.photos_product" />
+          <EntitySet Name="product" EntityType="Self.product" />
+          <EntitySet Name="user" EntityType="Self.user" />
+          <AssociationSet Name="category_fk_Category_Category1" Association="Self.category_fk_Category_Category1">
+            <End Role="category" EntitySet="category" />
+            <End Role="category1" EntitySet="category" />
+          </AssociationSet>
+          <AssociationSet Name="product_fk_Product_Category" Association="Self.product_fk_Product_Category">
+            <End Role="category" EntitySet="category" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="photos_product_fk_Photos_Product_Product1" Association="Self.photos_product_fk_Photos_Product_Product1">
+            <End Role="product" EntitySet="product" />
+            <End Role="photos_product" EntitySet="photos_product" />
+          </AssociationSet>
+          <AssociationSet Name="product_user" Association="Self.product_user">
+            <End Role="product" EntitySet="product" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="perfilticModelStoreContainer" CdmEntityContainer="perfilticEntities">
+          <EntitySetMapping Name="category">
+            <EntityTypeMapping TypeName="perfilticModel.category">
+              <MappingFragment StoreEntitySet="category">
+                <ScalarProperty Name="idCategory" ColumnName="idCategory" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="namePhoto" ColumnName="namePhoto" />
+                <ScalarProperty Name="fatherCategory" ColumnName="fatherCategory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="photos_product">
+            <EntityTypeMapping TypeName="perfilticModel.photos_product">
+              <MappingFragment StoreEntitySet="photos_product">
+                <ScalarProperty Name="id_photo" ColumnName="id_photo" />
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product">
+            <EntityTypeMapping TypeName="perfilticModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="weight" ColumnName="weight" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="idCategory" ColumnName="idCategory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="perfilticModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="idUsuer" ColumnName="idUsuer" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="user1" ColumnName="user" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="verificationCode" ColumnName="verificationCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="product_user" TypeName="perfilticModel.product_user" StoreEntitySet="product_user">
+            <EndProperty Name="product">
+              <ScalarProperty Name="idProduct" ColumnName="idProduct" />
+            </EndProperty>
+            <EndProperty Name="user">
+              <ScalarProperty Name="idUsuer" ColumnName="idUsuer" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
