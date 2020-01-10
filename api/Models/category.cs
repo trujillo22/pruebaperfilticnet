@@ -18,7 +18,7 @@ namespace api.Models
         public category()
         {
             this.category1 = new HashSet<category>();
-            this.product = new HashSet<product>();
+            //this.product = new HashSet<product>();
         }
     
         public int idCategory { get; set; }

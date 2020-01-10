@@ -19,6 +19,14 @@ namespace api
                 routeTemplate: "api/{controller}/{username}/{pass}",
                 defaults: new { username = RouteParameter.Optional, pass = RouteParameter.Optional }
             );
+
+            /*
+            config.Routes.MapHttpRoute(
+                name: "getCategoryByID",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional, controller = "categories"}
+            );
+            */
         }
     }
 }
