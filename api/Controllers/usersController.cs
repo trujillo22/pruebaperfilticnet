@@ -53,6 +53,7 @@ namespace api.Controllers
         // GET: api/users/ejemplo@abc.com/123456
         [ResponseType(typeof(user))]
         [Route("api/users/{username}/{pass}")]
+        [HttpGet]
         public IHttpActionResult GetuserbyCredentials(string username, string pass)
         {
             user user = db.user.Where(x => x.user1.ToLower().Equals(username.ToLower()) && x.password.Equals(pass)).FirstOrDefault();
@@ -80,7 +81,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!user.user1.ToLower().Equals(username.ToLower()))
+            if (!user.user1.ToLower().ToString().Equals(username.ToLower().ToString()))
             {
                 return BadRequest();
             }
@@ -140,10 +141,13 @@ namespace api.Controllers
         /// <returns>un estado 200 con la informacion del usuario eliminado</returns>
         // DELETE: api/users/ejemplo@gmail.com
         [ResponseType(typeof(user))]
-        [Route("api/users/{username}")]
+        [Route("api/users/delete/{username}")]
+        [HttpDelete]
         public IHttpActionResult Deleteuser(string username)
         {
+            //user user = db.user.Where(x => x.user1.ToString().ToLower().Equals(username.ToString().ToLower())).FirstOrDefault();
             user user = db.user.Where(x => x.user1.ToLower().Equals(username.ToLower())).FirstOrDefault();
+
             if (user == null)
             {
                 return NotFound();
