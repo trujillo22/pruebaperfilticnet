@@ -12,6 +12,9 @@ using api.Models;
 
 namespace api.Controllers
 {
+    /// <summary>
+    /// Clase que representa el controlador para el servicio de users
+    /// </summary>
     public class usersController : ApiController
     {
         private perfilticEntities db = new perfilticEntities();

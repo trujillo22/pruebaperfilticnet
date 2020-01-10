@@ -14,6 +14,9 @@ using api.Models.Utils;
 
 namespace api.Controllers
 {
+    /// <summary>
+    /// Clase que representa el controlador para el servicio de categories
+    /// </summary>
     public class categoriesController : ApiController
     {
         private perfilticEntities db = new perfilticEntities();

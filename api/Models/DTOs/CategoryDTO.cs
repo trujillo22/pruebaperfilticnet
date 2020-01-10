@@ -5,6 +5,9 @@ using System.Web;
 
 namespace api.Models.DTOs
 {
+    /// <summary>
+    /// Clase que representa una categoria con sus elementos relacionados
+    /// </summary>
     public class CategoryDTO
     {
         public int IdCategory { get; set; }

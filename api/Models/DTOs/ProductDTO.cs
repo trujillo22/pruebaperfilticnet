@@ -5,6 +5,9 @@ using System.Web;
 
 namespace api.Models.DTOs
 {
+    /// <summary>
+    /// Clase que representa un Producto con sus relaciones
+    /// </summary>
     public class ProductDTO
     {
         public int idProduct { get; set; }
