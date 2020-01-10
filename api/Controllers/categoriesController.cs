@@ -133,6 +133,12 @@ namespace api.Controllers
             }
         }
 
+        /// <summary>
+        /// metodo que permite modificar una categoria
+        /// </summary>
+        /// <param name="id">identificador de la categoria que se quiere modificar</param>
+        /// <param name="category">objeto que contiene la informacion a modificar</param>
+        /// <returns>un estado 204 sin contendio</returns>
         // PUT: api/categories/5
         [HttpPut]
         [ResponseType(typeof(void))]
@@ -170,6 +176,11 @@ namespace api.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        /// <summary>
+        /// Metodo que permite agregar una categoria a la BD
+        /// </summary>
+        /// <param name="category">informacion de la categoria que se quiere agregar</param>
+        /// <returns>un estado 201 con contenido el cual es la informacion agregada</returns>
         // POST: api/categories
         [ResponseType(typeof(CategoryDTO))]
         public IHttpActionResult Postcategory(category category)
@@ -185,8 +196,14 @@ namespace api.Controllers
             return CreatedAtRoute("DefaultApi", new { id = category.idCategory }, Converters.ConverterCategoryEntityToCategoryDTO(category));
         }
 
+        /// <summary>
+        /// metodo que permite eliminar una categoria
+        /// </summary>
+        /// <param name="id">int que representa el idenficador de la categoria que se quiere eliminar</param>
+        /// <returns>un estado 200 con la informacion de la categoria eliminada</returns>
         // DELETE: api/categories/5
-        [ResponseType(typeof(category))]
+        [ResponseType(typeof(categoryDTO))]
+        [Route("api/categories/{id}")]
         public IHttpActionResult Deletecategory(int id)
         {
             category category = db.category.Find(id);
@@ -198,7 +215,7 @@ namespace api.Controllers
             db.category.Remove(category);
             db.SaveChanges();
 
-            return Ok(category);
+            return Ok(Converters.ConverterCategoryEntityToCategoryDTO(category));
         }
 
         protected override void Dispose(bool disposing)
