@@ -50,14 +50,14 @@ namespace api.Controllers
 
         // PUT: api/users/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult Putuser(int id, user user)
+        public IHttpActionResult Putuser(string username, user user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.idUsuer)
+            if (!user.user1.ToLower().Equals(username.ToLower()))
             {
                 return BadRequest();
             }
@@ -70,7 +70,7 @@ namespace api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!userExists(id))
+                if (!userExists(username))
                 {
                     return NotFound();
                 }
@@ -92,17 +92,24 @@ namespace api.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.user.Add(user);
-            db.SaveChanges();
+            if (!userExists(user.user1))
+            {
+                db.user.Add(user);
+                db.SaveChanges();
+            }
+            else
+            {
+                return BadRequest();
+            }          
 
-            return CreatedAtRoute("DefaultApi", new { id = user.idUsuer }, user);
+            return CreatedAtRoute("DefaultApi", new { username = user.user1 }, user);
         }
 
-        // DELETE: api/users/5
+        // DELETE: api/users/ejemplo@gmail.com
         [ResponseType(typeof(user))]
-        public IHttpActionResult Deleteuser(int id)
+        public IHttpActionResult Deleteuser(string username)
         {
-            user user = db.user.Find(id);
+            user user = db.user.Where(x => x.user1.ToLower().Equals(username.ToLower())).FirstOrDefault();
             if (user == null)
             {
                 return NotFound();
@@ -123,9 +130,9 @@ namespace api.Controllers
             base.Dispose(disposing);
         }
 
-        private bool userExists(int id)
+        private bool userExists(string username)
         {
-            return db.user.Count(e => e.idUsuer == id) > 0;
+            return db.user.Count(e => e.user1.ToLower().Equals(username.ToLower())) > 0;
         }
     }
 }
