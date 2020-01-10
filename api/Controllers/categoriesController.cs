@@ -202,7 +202,7 @@ namespace api.Controllers
         /// <param name="id">int que representa el idenficador de la categoria que se quiere eliminar</param>
         /// <returns>un estado 200 con la informacion de la categoria eliminada</returns>
         // DELETE: api/categories/5
-        [ResponseType(typeof(categoryDTO))]
+        [ResponseType(typeof(CategoryDTO))]
         [Route("api/categories/{id}")]
         public IHttpActionResult Deletecategory(int id)
         {
