@@ -55,6 +55,68 @@ namespace api.Controllers
             return Ok(Converters.ConverterCategoryEntityToCategoryDTO(category));
         }
 
+        /// <summary>
+        /// Permite obtener la categoria indicada con todos sus productos y si es una categoria padre se mostraran 
+        /// todos los productos de sus categorias hijas.
+        /// </summary>
+        /// <param name="id">int that represent the ID of categoria</param>
+        /// <returns></returns>
+        [ResponseType(typeof(CategoryDTO))]
+        [Route("api/categories/products/{id}")]
+        public IHttpActionResult GetcategoryAndProducts(int id)
+        {
+            category category = db.category.Find(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            List<ProductDTO> listProductsDTO = new List<ProductDTO>();
+            listChildrenCategories = new List<int>();
+            getChildrenCategories(id);
+   
+            foreach (int idCategoryTemp in listChildrenCategories)
+            {
+                foreach (product productEntityTemp in db.product.Where(x => x.idCategory == idCategoryTemp))
+                {
+                    if (listProductsDTO.Where(x => x.idProduct == productEntityTemp.idProduct).Count() == 0)
+                    {
+                        listProductsDTO.Add(Converters.ConverterProductEntityToProductDTO(productEntityTemp));
+                    }
+                    
+                }
+            }
+
+            CategoryDTO categoryDTO = Converters.ConverterCategoryEntityToCategoryDTO(category);
+
+            categoryDTO.ListProducts = listProductsDTO;
+
+            return Ok(categoryDTO);
+        }
+
+        private List<int> listChildrenCategories;
+
+        private void getChildrenCategories(int idCategoriaPadre)
+        {
+            listChildrenCategories.Add(idCategoriaPadre);
+            List<int> list = (from c in db.category
+                             where c.fatherCategory == idCategoriaPadre
+                             select c.idCategory).ToList();
+
+            if (list.Count == 0)
+            {
+                return;
+            }
+            else
+            {
+                listChildrenCategories.AddRange(list);
+                foreach (int idcategoryTemp in list)
+                {
+                    getChildrenCategories(idcategoryTemp);
+                }
+            }
+        }
+
         // PUT: api/categories/5
         [ResponseType(typeof(void))]
         public IHttpActionResult Putcategory(int id, category category)

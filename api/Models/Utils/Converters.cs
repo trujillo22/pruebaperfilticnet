@@ -13,7 +13,8 @@ namespace api.Models.Utils
             CategoryDTO categoryDTO = new CategoryDTO { 
                 IdCategory = categoryEntity.idCategory,
                 Name = categoryEntity.name,
-                NamePhoto = categoryEntity.namePhoto
+                NamePhoto = categoryEntity.namePhoto,
+                FatherCategory = categoryEntity.fatherCategory               
             };
 
             return categoryDTO;

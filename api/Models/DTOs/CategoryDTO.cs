@@ -10,6 +10,7 @@ namespace api.Models.DTOs
         public int IdCategory { get; set; }
         public string Name { get; set; }
         public string NamePhoto { get; set; }
-        public List<ProductDTO> listProducts { get; set; }
+        public Nullable<int> FatherCategory { get; set; }
+        public List<ProductDTO> ListProducts { get; set; }
     }
 }
