@@ -16,12 +16,21 @@ namespace api.Controllers
     {
         private perfilticEntities db = new perfilticEntities();
 
+        /// <summary>
+        /// Metodo que permite obtener todos los usuarios de la bd
+        /// </summary>
+        /// <returns>una list que contiene todos los usuarios de la bd</returns>
         // GET: api/users
         public IQueryable<user> Getuser()
         {
             return db.user;
         }
 
+        /// <summary>
+        /// Metodoq ue permite obtner un usuario por su nombre de usuario
+        /// </summary>
+        /// <param name="username">string que representa el nombre de usuario</param>
+        /// <returns>una estado 200 con la informacion del usuario correspondiente al nombre de usario o un 400 en caso contrario</returns>
         // GET: api/users/ejemplo@abd.com
         [ResponseType(typeof(user))]
         public IHttpActionResult Getuser(string username)
@@ -35,8 +44,15 @@ namespace api.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Metodo que permite obtener un usuario por sus credenciales, nombre de usuario y password
+        /// </summary>
+        /// <param name="username">string que representa el nombre de usuario</param>
+        /// <param name="pass">string que repersenta el password</param>
+        /// <returns>un estado 200 con la informacion del usuario encontrado, o un 400 en caso contrario</returns>
         // GET: api/users/ejemplo@abc.com/123456
         [ResponseType(typeof(user))]
+        [Route("api/users/{username}/{pass}")]
         public IHttpActionResult GetuserbyCredentials(string username, string pass)
         {
             user user = db.user.Where(x => x.user1.ToLower().Equals(username.ToLower()) && x.password.Equals(pass)).FirstOrDefault();
@@ -48,9 +64,16 @@ namespace api.Controllers
             return Ok(user);
         }
 
-        // PUT: api/users/5
+        /// <summary>
+        /// Metodo que permite modificar un usuario en la bd
+        /// </summary>
+        /// <param name="username">string que representa al nombre de usuario</param>
+        /// <param name="user">obeto que contien toda la informacion del usuario a modificar</param>
+        /// <returns>un estado 204</returns>
+        // PUT: api/users/ejemplo@abd.com
         [ResponseType(typeof(void))]
-        public IHttpActionResult Putuser(string username, user user)
+        [Route("api/users/{username}")]
+        public IHttpActionResult Putuser(string username, [FromBody]user user)
         {
             if (!ModelState.IsValid)
             {
@@ -83,6 +106,11 @@ namespace api.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        /// <summary>
+        /// metodo que permite agrear un usuario al BD
+        /// </summary>
+        /// <param name="user">objeto que contiene la informacion del usuario para agregar</param>
+        /// <returns>un estado 201 con contendio el cual es la inforamcion del usario agregado</returns>
         // POST: api/users
         [ResponseType(typeof(user))]
         public IHttpActionResult Postuser(user user)
@@ -105,8 +133,14 @@ namespace api.Controllers
             return CreatedAtRoute("DefaultApi", new { username = user.user1 }, user);
         }
 
+        /// <summary>
+        /// Metodo que permite eliminar un usuario
+        /// </summary>
+        /// <param name="username">string que representa el nombre de usuario a eliminar</param>
+        /// <returns>un estado 200 con la informacion del usuario eliminado</returns>
         // DELETE: api/users/ejemplo@gmail.com
         [ResponseType(typeof(user))]
+        [Route("api/users/{username}")]
         public IHttpActionResult Deleteuser(string username)
         {
             user user = db.user.Where(x => x.user1.ToLower().Equals(username.ToLower())).FirstOrDefault();
