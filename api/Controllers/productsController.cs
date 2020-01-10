@@ -35,8 +35,14 @@ namespace api.Controllers
             return listProductsDTO;
         }
 
+        /// <summary>
+        /// Metodo que permite obtener el producto especificado en parametro
+        /// </summary>
+        /// <param name="id">int que representa el identificador del producto</param>
+        /// <returns>un estado 200 con el contenido del producto encontrado o un 400 en caso contrario</returns>
         // GET: api/products/5
-        [ResponseType(typeof(product))]
+        [ResponseType(typeof(ProductDTO))]
+        [Route("api/products/{id}")]
         public IHttpActionResult Getproduct(int id)
         {
             product product = db.product.Find(id);
@@ -45,12 +51,19 @@ namespace api.Controllers
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(Converters.ConverterProductEntityToProductDTO(product));
         }
 
+        /// <summary>
+        /// Metodo que permite modificar un producto
+        /// </summary>
+        /// <param name="id">int que representa el identificador del producto que se desea modificar</param>
+        /// <param name="product">objeto que contien la informacion del producto a modificar</param>
+        /// <returns>un estado 204 cuando se modifica</returns>
         // PUT: api/products/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult Putproduct(int id, product product)
+        [Route("api/products/{id}")]
+        public IHttpActionResult Putproduct(int id, [FromBody]product product)
         {
             if (!ModelState.IsValid)
             {
@@ -84,6 +97,11 @@ namespace api.Controllers
         }
 
         // POST: api/products
+        /// <summary>
+        /// Metodo que permite agregar un producto a la BD
+        /// </summary>
+        /// <param name="product">objeto que contiene la informacion del producto a agregar</param>
+        /// <returns>un estado 201</returns>
         [ResponseType(typeof(product))]
         public IHttpActionResult Postproduct(product product)
         {
@@ -95,11 +113,17 @@ namespace api.Controllers
             db.product.Add(product);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = product.idProduct }, product);
+            return CreatedAtRoute("DefaultApi", new { id = product.idProduct }, Converters.ConverterProductEntityToProductDTO(product));
         }
 
+        /// <summary>
+        /// metodo que permit eliminar un producto de la BD
+        /// </summary>
+        /// <param name="id">int que representa el idenficador a eliminar</param>
+        /// <returns>un estado 200 cuando se elimina, o un 400 en caso contrario</returns>
         // DELETE: api/products/5
         [ResponseType(typeof(product))]
+        [Route("api/products/{id}")]
         public IHttpActionResult Deleteproduct(int id)
         {
             product product = db.product.Find(id);
@@ -111,7 +135,7 @@ namespace api.Controllers
             db.product.Remove(product);
             db.SaveChanges();
 
-            return Ok(product);
+            return Ok(Converters.ConverterProductEntityToProductDTO(product));
         }
 
         protected override void Dispose(bool disposing)
