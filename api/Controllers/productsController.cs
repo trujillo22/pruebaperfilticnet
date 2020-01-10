@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using api.Models;
+using api.Models.DTOs;
+using api.Models.Utils;
 
 namespace api.Controllers
 {
@@ -16,10 +18,21 @@ namespace api.Controllers
     {
         private perfilticEntities db = new perfilticEntities();
 
+        /// <summary>
+        /// Metodo que permite obtener todos los productos de la BD
+        /// </summary>
+        /// <returns>una list de productos</returns>
         // GET: api/products
-        public IQueryable<product> Getproduct()
+        public List<ProductDTO> Getproduct()
         {
-            return db.product;
+            List<ProductDTO> listProductsDTO = new List<ProductDTO>();
+
+            foreach (product productEntityTemp in db.product)
+            {
+                listProductsDTO.Add(Converters.ConverterProductEntityToProductDTO(productEntityTemp));
+            }
+
+            return listProductsDTO;
         }
 
         // GET: api/products/5
