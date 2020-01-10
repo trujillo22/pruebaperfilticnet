@@ -18,6 +18,10 @@ namespace api.Controllers
     {
         private perfilticEntities db = new perfilticEntities();
 
+        /// <summary>
+        /// MEtodo que permite obtener toda la informacion basica de todas las categorias de la BD
+        /// </summary>
+        /// <returns>una list de categorias</returns>
         // GET: api/categories
         public List<CategoryDTO> Getcategory()
         {
@@ -41,6 +45,11 @@ namespace api.Controllers
             return listCategoriesDTO;
         }
 
+        /// <summary>
+        /// Metodo que permite obtener la informacion basica de una categoria sin sus productos
+        /// </summary>
+        /// <param name="id">int que representa el id de la categoria que se buscara</param>
+        /// <returns>un estado 200 con el objeto correspondiente o un 404 en caso contrario</returns>
         // GET: api/categories/5
         [ResponseType(typeof(CategoryDTO))]
         [Route("api/categories/{id}")]
@@ -59,8 +68,8 @@ namespace api.Controllers
         /// Permite obtener la categoria indicada con todos sus productos y si es una categoria padre se mostraran 
         /// todos los productos de sus categorias hijas.
         /// </summary>
-        /// <param name="id">int that represent the ID of categoria</param>
-        /// <returns></returns>
+        /// <param name="id">int que representa la categoria que se va a buscar</param>
+        /// <returns>un estado 200 con el objeto correspondiente o un 404 en caso contrario</returns>
         [ResponseType(typeof(CategoryDTO))]
         [Route("api/categories/products/{id}")]
         public IHttpActionResult GetcategoryAndProducts(int id)
@@ -94,8 +103,15 @@ namespace api.Controllers
             return Ok(categoryDTO);
         }
 
+        /// <summary>
+        /// Objeto de tipo list que me permite guardar las categorias hijas.
+        /// </summary>
         private List<int> listChildrenCategories;
 
+        /// <summary>
+        /// Metodo que permite obtenre una lista de las categorias hijas de la categoria especifica en el parametro
+        /// </summary>
+        /// <param name="idCategoriaPadre">int que representa la categoria a la cual se le buscaran las categorias hijas</param>
         private void getChildrenCategories(int idCategoriaPadre)
         {
             listChildrenCategories.Add(idCategoriaPadre);
@@ -118,8 +134,10 @@ namespace api.Controllers
         }
 
         // PUT: api/categories/5
+        [HttpPut]
         [ResponseType(typeof(void))]
-        public IHttpActionResult Putcategory(int id, category category)
+        [Route("api/categories/{id}")]
+        public IHttpActionResult Putcategory(int id,[FromBody]category category)
         {
             if (!ModelState.IsValid)
             {
@@ -153,7 +171,7 @@ namespace api.Controllers
         }
 
         // POST: api/categories
-        [ResponseType(typeof(category))]
+        [ResponseType(typeof(CategoryDTO))]
         public IHttpActionResult Postcategory(category category)
         {
             if (!ModelState.IsValid)
@@ -164,7 +182,7 @@ namespace api.Controllers
             db.category.Add(category);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = category.idCategory }, category);
+            return CreatedAtRoute("DefaultApi", new { id = category.idCategory }, Converters.ConverterCategoryEntityToCategoryDTO(category));
         }
 
         // DELETE: api/categories/5
